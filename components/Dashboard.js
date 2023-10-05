@@ -25,19 +25,25 @@ function Dashboard() {
       {publicKey ? (
         <div className="dashboard-container">
           <div className="card-collection">
-            {data.map((item) => (
-              <div key={item.id} className="card">
-                <Image
-                  src={item.image}
-                  width={100}
-                  height={100}
-                  alt={item.title}
-                />
-                <h2>{item.title}</h2>
-                <p>{item.description}</p>
-                <span>{item.token_id}</span>
+            {data.length ? (
+              data.map((item) => (
+                <div key={item.id} className="card">
+                  <Image
+                    src={item.image}
+                    width={100}
+                    height={100}
+                    alt={item.title}
+                  />
+                  <h2>{item.title}</h2>
+                  <p>{item.description}</p>
+                  <span>{item.token_id}</span>
+                </div>
+              ))
+            ) : (
+              <div className="text-container">
+                <h3>No Collection Available ....</h3>
               </div>
-            ))}
+            )}
           </div>
         </div>
       ) : (

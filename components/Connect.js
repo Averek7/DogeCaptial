@@ -4,7 +4,6 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 function Connect() {
   return (
     <div className='connect'>
-      {/* <WalletMultiButton/> */}
       <h1>
         Connect To A Wallet
       </h1>
@@ -12,4 +11,4 @@ function Connect() {
   )
 }
 
-export default Connect
+export default Connect;

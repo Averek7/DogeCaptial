@@ -1,6 +1,6 @@
 .dashboard-container {
-    margin: 50px;
-    padding: 50px;
+  margin: 50px;
+  padding: 50px;
 }
 
 .card-collection {
@@ -8,7 +8,7 @@
   flex-wrap: wrap;
   gap: 20px; /* Adjust the gap between cards as needed */
   padding: 20px; /* Add padding to the card collection container */
-  justify-content:first baseline;
+  justify-content: first baseline;
 }
 
 /* Individual Card */
@@ -43,4 +43,11 @@
   max-width: 100%;
   height: auto;
   border-radius: 4px;
+}
+
+.text-container {
+
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
