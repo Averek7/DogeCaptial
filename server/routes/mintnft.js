@@ -7,7 +7,7 @@ router.post("/:nftMint/mintnft", async (req, res) => {
   const { nftMint } = req.params;
   if (!nftMint)
     return res.status(400).json({ message: "Wallet Address Not Found" });
-
+  
   if (!title) return res.status(400).json({ message: "Title not found" });
 
   if (!description)

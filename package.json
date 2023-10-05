@@ -17,10 +17,12 @@
     "@solana/wallet-adapter-wallets": "^0.15.5",
     "@solana/web3.js": "^1.78.7",
     "axios": "^1.5.1",
+    "ipfs-http-client": "^60.0.1",
     "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-loader-spinner": "^5.4.5"
+    "react-loader-spinner": "^5.4.5",
+    "web3.storage": "^4.5.5"
   },
   "devDependencies": {
     "eslint": "^8",

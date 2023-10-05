@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import "../styles/Header.css";
 import "../styles/mintform.css";
 import "../styles/Form.css";
+import "../styles/Connect.css";
 
 import React, { useMemo } from "react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
