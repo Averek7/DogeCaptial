@@ -10,7 +10,7 @@ function Dashboard() {
 
   const getAllNft = async () => {
     const response = await axios.get(
-      `http://localhost:5000/api/${publicKey}/dashboard`
+      `https://dogecapital.onrender.com/api/${publicKey}/dashboard`
     );
     setData(response.data.nft);
   };
