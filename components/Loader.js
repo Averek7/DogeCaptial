@@ -8,7 +8,7 @@ const Loader = ({ height, width }) => {
       height={height ? height : "80"}
       width={width ? width : "80"}
       radisu={1}
-      color="#9925ad"
+      color="whitesmoke"
       ariaLabel="puff-loading"
       wrapperStyle={{}}
       wrapperClass=""

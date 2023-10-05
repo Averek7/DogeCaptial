@@ -3,6 +3,7 @@ import "../styles/Header.css";
 import "../styles/mintform.css";
 import "../styles/Form.css";
 import "../styles/Connect.css";
+import "../styles/Dashboard.css";
 
 import React, { useMemo } from "react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
@@ -18,8 +19,11 @@ import {
 import { clusterApiUrl } from "@solana/web3.js";
 import { BackpackWalletAdapter } from "@solana/wallet-adapter-backpack";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import "../styles/Home.module.css";
+import Layout from "@/components/Layout";
 
 export default function App({ Component, pageProps }) {
   const network = WalletAdapterNetwork.Devnet;
@@ -43,7 +47,10 @@ export default function App({ Component, pageProps }) {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <Component {...pageProps} />
+          <Layout>
+            <ToastContainer />
+            <Component {...pageProps} />
+          </Layout>
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

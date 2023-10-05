@@ -6,6 +6,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import axios from "axios";
 import { Web3Storage } from "web3.storage";
 import Connect from "./Connect";
+import { toast } from 'react-toastify';
 
 function Forms() {
   const { publicKey } = useWallet();
@@ -21,6 +22,20 @@ function Forms() {
   const storage = new Web3Storage({ token: token });
 
   const [localLoading, setLocalLoading] = useState(false);
+  
+  const handleSuccess = (message) => {
+    toast.success(message, {
+      position: 'top-right',
+      autoClose: 3000,
+    });
+  };
+
+  const handleError = (message) => {
+    toast.error(message, {
+      position: 'top-right',
+      autoClose: 3000,
+    });
+  };
 
   const handleChange = (e) => {
     setData({
@@ -50,7 +65,6 @@ function Forms() {
         authorization: auth,
       },
     });
-
     setLocalLoading(true);
     client
       .add(JSON.stringify(data))
@@ -60,25 +74,31 @@ function Forms() {
         console.log("addresss", publicKey);
         console.log("dataIPFS", dataIpfs);
 
-        const res = await axios.post(
-          `https://dogecapital.onrender.com/api/${publicKey}/mintnft`,
-          data,
-          {
-            headers: customHeaders,
-          }
-        );
-        console.log(res);
-        setLocalLoading(false);
-        setData({
-          image: "",
-          title: "",
-          description: "",
-          token_id: "",
-        });
+        try {
+          const res = await axios.post(
+            `https://dogecapital.onrender.com/api/${publicKey}/mintnft`,
+            data,
+            {
+              headers: customHeaders,
+            }
+          );
+          console.log(res);
+          setData({
+            image: "",
+            title: "",
+            description: "",
+            token_id: "",
+          });
+          handleSuccess("Minted !")
+          setLocalLoading(false);
+        } catch (error) {
+          handleError("Error Occured !")
+          setLocalLoading(false);
+        }
       })
       .catch((error) => {
-        console.log("error", error);
         setLocalLoading(false);
+        handleError(error.message);
       });
   };
 
@@ -98,10 +118,11 @@ function Forms() {
           ...data,
           image: `https://ipfs.io/ipfs/${res}/${nFile[0].name}`,
         });
+        handleSuccess("Image Uploaded");
       })
       .catch((err) => {
         setLocalLoading(false);
-        console.log(err.message);
+        handleError(err.message);
       });
     console.log(data.image);
   };

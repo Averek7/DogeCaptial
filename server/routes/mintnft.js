@@ -7,7 +7,7 @@ router.post("/:nftMint/mintnft", async (req, res) => {
   const { nftMint } = req.params;
   if (!nftMint)
     return res.status(400).json({ message: "Wallet Address Not Found" });
-  
+
   if (!title) return res.status(400).json({ message: "Title not found" });
 
   if (!description)
@@ -41,5 +41,24 @@ router.post("/:nftMint/mintnft", async (req, res) => {
       .json({ status: false, message: "Internal Server Error" });
   }
 });
+
+router.get('/:nftMint/dashboard', async(req, res) => {
+  const { nftMint } = req.params;
+  if (!nftMint)
+  return res.status(400).json({ message: "Wallet Address Not Found" });
+
+  try {
+    const allNFT = await nftwallet.find({ nftMint });
+    return res.json({
+      message: `Successfully Fetched NFT with ${nftMint}`,
+      nft: allNFT,
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(500)
+      .json({ status: false, message: "Internal Server Error" });
+  }
+})
 
 module.exports = router;
