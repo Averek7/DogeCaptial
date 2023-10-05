@@ -31,16 +31,14 @@ function Forms() {
         <div className="txt">
           <h1 style={{ margin: "10px 0px", color: "white"}}>NFT Details</h1>
         </div>
-        <Error />
         <InputBox
           name="image"
           type="file"
           title="Select Image"
           value={data.imgInput}
-        //   handleChange={nftUpload}
+          handleChange={handleChange}
           placeholder="Item Name"
           disabled={localLoading}
-          style={{"::placeholder": {color:"whitesmoke"}}}
         />
         <InputBox
           name="title"
@@ -57,7 +55,7 @@ function Forms() {
             className="inputBox"
             name="description"
             value={data.description}
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
             placeholder="Provide detailed description of your item"
             disabled={localLoading}
           />
