@@ -61,4 +61,20 @@ router.get('/:nftMint/dashboard', async(req, res) => {
   }
 })
 
+// getAllNfts
+router.get('/nfts', async(req, res) => {
+  try {
+    const allNFT = await nftwallet.find({});
+    return res.json({
+      message: `Successfully Fetched All NFTs`,
+      nft: [allNFT]
+    })
+  } catch(error) {
+    console.log(error.message);
+    return res
+      .status(500)
+      .json({ status: false, message: "Internal Server Error" });
+  }
+})
+
 module.exports = router;
