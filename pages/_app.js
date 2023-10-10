@@ -5,52 +5,66 @@ import "../styles/Form.css";
 import "../styles/Connect.css";
 import "../styles/Dashboard.css";
 
-import React, { useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import {
+  WalletModalProvider,
+} from "@solana/wallet-adapter-react-ui";
 import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
 import {
-  GlowWalletAdapter,
   PhantomWalletAdapter,
+  SlopeWalletAdapter,
+  SolflareWalletAdapter,
+  SolletWalletAdapter,
+  SolletExtensionWalletAdapter,
+  LedgerWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
-import { clusterApiUrl } from "@solana/web3.js";
-import { BackpackWalletAdapter } from "@solana/wallet-adapter-backpack";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import "../styles/Home.module.css";
 import Layout from "@/components/Layout";
+import { clusterApiUrl } from "@solana/web3.js";
 
 export default function App({ Component, pageProps }) {
-  const network = WalletAdapterNetwork.Devnet;
+  const [mounted, setMounted] = useState(false);
 
-  // You can provide a custom RPC endpoint here
+  const network = WalletAdapterNetwork.Devnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
-  // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
-  // Only the wallets you configure here will be compiled into your application, and only the dependencies
-  // of wallets that your users connect to will be loaded
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),
-      new GlowWalletAdapter(),
-      new BackpackWalletAdapter(),
+      new SlopeWalletAdapter(),
+      new SolflareWalletAdapter(),
+      new LedgerWalletAdapter(),
+      new SolletWalletAdapter({ network }),
+      new SolletExtensionWalletAdapter({ network }),
     ],
     [network]
   );
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
-    <ConnectionProvider endpoint={endpoint}>
+    <ConnectionProvider
+      endpoint={endpoint}
+      config={{ commitment: "confirmed" }}
+    >
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <Layout>
-            <ToastContainer />
-            <Component {...pageProps} />
-          </Layout>
+          {mounted && (
+            <Layout>
+              <ToastContainer />
+              <Component {...pageProps} />
+            </Layout>
+          )}
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

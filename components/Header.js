@@ -16,9 +16,9 @@ function Header() {
     },
     {
       name: "PROFILE",
-      link: "/dashboard"
-    }
-  ]
+      link: "/dashboard",
+    },
+  ];
   return (
     <div className="header-container">
       <div className="navbarLogo">
@@ -26,7 +26,7 @@ function Header() {
       </div>
       <div>
         <h1 className="navbarList">
-        <div className="navbarList">
+          <div className="navbarList">
             {navbarList.map((listItem, index) => (
               <div
                 key={index}
@@ -37,14 +37,13 @@ function Header() {
                     : "navbarItem"
                 }
               >
-                <Link href={listItem.link} style={{textDecoration: "none"}}>
+                <Link href={listItem.link} style={{ textDecoration: "none" }}>
                   <p>{listItem.name}</p>
                 </Link>
               </div>
             ))}
           </div>
         </h1>
-
       </div>
       <div>
         <WalletMultiButton />

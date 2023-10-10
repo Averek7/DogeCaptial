@@ -1,15 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Loader from "./Loader";
 import InputBox from "./InputBox";
 import { create } from "ipfs-http-client";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import axios from "axios";
 import { Web3Storage } from "web3.storage";
 import Connect from "./Connect";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import {
+  Metaplex,
+  bundlrStorage,
+  toMetaplexFile,
+  walletAdapterIdentity,
+} from "@metaplex-foundation/js";
 
 function Forms() {
-  const { publicKey } = useWallet();
+  const { publicKey, wallet, connected } = useWallet();
+  const { connection } = useConnection();
+
+  const metaplex = Metaplex.make(connection)
+    .use(walletAdapterIdentity(wallet))
+    .use(
+      bundlrStorage({
+        address: "https://devnet.bundlr.network",
+        providerUrl: "https://api.devnet.solana.com",
+        timeout: 60000,
+      }, [connection, wallet])
+    );
+
   const [data, setData] = useState({
     title: "",
     description: "",
@@ -22,17 +40,17 @@ function Forms() {
   const storage = new Web3Storage({ token: token });
 
   const [localLoading, setLocalLoading] = useState(false);
-  
+
   const handleSuccess = (message) => {
     toast.success(message, {
-      position: 'top-right',
+      position: "top-right",
       autoClose: 3000,
     });
   };
 
   const handleError = (message) => {
     toast.error(message, {
-      position: 'top-right',
+      position: "top-right",
       autoClose: 3000,
     });
   };
@@ -89,12 +107,13 @@ function Forms() {
             description: "",
             token_id: "",
           });
-          handleSuccess("Minted !")
+          handleSuccess("Minted !");
           setLocalLoading(false);
         } catch (error) {
-          handleError("Error Occured !")
-          setLocalLoading(false);
+          handleError("Error Occured !");
+        setLocalLoading(false);
         }
+        setLocalLoading(false);
       })
       .catch((error) => {
         setLocalLoading(false);
@@ -105,10 +124,8 @@ function Forms() {
   const nftUpload = (e) => {
     e.preventDefault();
     setLocalLoading(true);
-    // ipfs
     const nFile = e.target.files;
     console.log(nFile);
-
     storage
       .put(nFile)
       .then((res) => {
@@ -142,6 +159,7 @@ function Forms() {
               type="file"
               title="Select Image"
               value={data.imgInput}
+              // handleChange={handleChange}
               handleChange={nftUpload}
               placeholder="Item Name"
               disabled={localLoading}
@@ -166,7 +184,7 @@ function Forms() {
                 disabled={localLoading}
               />
             </label>
-            
+
             <InputBox
               name="token_id"
               title="Token ID"
