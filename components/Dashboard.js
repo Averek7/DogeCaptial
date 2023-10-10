@@ -12,12 +12,12 @@ function Dashboard() {
     const response = await axios.get(
       `https://dogecapital.onrender.com/api/${publicKey}/dashboard`
     );
-    setData(response.data.nft);
+    setData(response.data.nfts);
   };
 
   useEffect(() => {
     getAllNft();
-  }, [publicKey]);
+  }, []);
 
   console.log(data);
   return (
@@ -25,8 +25,8 @@ function Dashboard() {
       {publicKey ? (
         <div className="dashboard-container">
           <div className="card-collection">
-            {data.length ? (
-              data.map((item) => (
+            {data?.length ? (
+              data?.map((item) => (
                 <div key={item.id} className="card">
                   <Image
                     src={item.image}

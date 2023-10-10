@@ -51,10 +51,10 @@ router.get('/:walletAddress/dashboard', async(req, res) => {
   return res.status(400).json({ message: "Wallet Address Not Found" });
 
   try {
-    const allNFT = await nftwallet.find({ walletAddress });
+    const nfts = await nftwallet.find({ walletAddress });
     return res.json({
       message: `Successfully Fetched NFT with ${walletAddress}`,
-      nft: {allNFT},
+      nfts: nfts
     });
   } catch (error) {
     console.log(error.message);
