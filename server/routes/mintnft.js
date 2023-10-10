@@ -1,11 +1,12 @@
+const { FindAllSupportsOnlyThreeFiltersMaxError } = require("@metaplex-foundation/js");
 const nftwallet = require("../model/NFT");
 const router =
  require("express").Router();
 
-router.post("/:nftMint/mintnft", async (req, res) => {
-  const { title, description, token_id, image } = req.body;
-  const { nftMint } = req.params;
-  if (!nftMint)
+router.post("/:walletAddress/mintnft", async (req, res) => {
+  const { title, description, token_id, image, nftMint } = req.body;
+  const { walletAddress } = req.params;
+  if (!walletAddress)
     return res.status(400).json({ message: "Wallet Address Not Found" });
 
   if (!title) return res.status(400).json({ message: "Title not found" });
@@ -17,6 +18,8 @@ router.post("/:nftMint/mintnft", async (req, res) => {
 
   if (!image) return res.status(400).json({ message: "Image link not found" });
 
+  if(!nftMint) return res.status(400).json({ message: "NFT Mint Address not found" });
+
   try {
     const nft = await nftwallet.findOne({ token_id });
     if (nft) {
@@ -25,9 +28,10 @@ router.post("/:nftMint/mintnft", async (req, res) => {
     await nftwallet.create({
       title,
       description,
-      nftMint,
+      walletAddress,
       token_id,
       image,
+      nftMint,
     });
     const allNFT = await nftwallet.find({ nftMint });
     return res.json({
@@ -42,16 +46,16 @@ router.post("/:nftMint/mintnft", async (req, res) => {
   }
 });
 
-router.get('/:nftMint/dashboard', async(req, res) => {
-  const { nftMint } = req.params;
-  if (!nftMint)
+router.get('/:walletAddress/dashboard', async(req, res) => {
+  const { walletAddress } = req.params;
+  if (!walletAddress)
   return res.status(400).json({ message: "Wallet Address Not Found" });
 
   try {
-    const allNFT = await nftwallet.find({ nftMint });
+    const allNFT = await nftwallet.find({ walletAddress });
     return res.json({
-      message: `Successfully Fetched NFT with ${nftMint}`,
-      nft: allNFT,
+      message: `Successfully Fetched NFT with ${walletAddress}`,
+      nft: {allNFT},
     });
   } catch (error) {
     console.log(error.message);
@@ -64,10 +68,17 @@ router.get('/:nftMint/dashboard', async(req, res) => {
 // getAllNfts
 router.get('/nfts', async(req, res) => {
   try {
-    const allNFT = await nftwallet.find({});
+    const response = await nftwallet.find({});
+    console.log(response);
+    
+    const data = response.map(obj => ({
+      [obj.nftMint]: obj.walletAddress
+    }));
+    
+    console.log(data)
     return res.json({
       message: `Successfully Fetched All NFTs`,
-      nft: [allNFT]
+      nft: data,
     })
   } catch(error) {
     console.log(error.message);

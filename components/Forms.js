@@ -10,22 +10,27 @@ import { toast } from "react-toastify";
 import {
   Metaplex,
   bundlrStorage,
+  keypairIdentity,
   toMetaplexFile,
   walletAdapterIdentity,
 } from "@metaplex-foundation/js";
 
 function Forms() {
-  const { publicKey, wallet, connected } = useWallet();
   const { connection } = useConnection();
+  const { publicKey } = useWallet();
+  const wallet = useWallet();
 
   const metaplex = Metaplex.make(connection)
     .use(walletAdapterIdentity(wallet))
     .use(
-      bundlrStorage({
-        address: "https://devnet.bundlr.network",
-        providerUrl: "https://api.devnet.solana.com",
-        timeout: 60000,
-      }, [connection, wallet])
+      bundlrStorage(
+        {
+          address: "https://devnet.bundlr.network",
+          providerUrl: "https://api.devnet.solana.com",
+          timeout: 60000,
+        },
+        [connection, wallet]
+      )
     );
 
   const [data, setData] = useState({
@@ -65,6 +70,63 @@ function Forms() {
 
   const customHeaders = {
     "Content-Type": "application/json",
+  };
+
+  const mintData = async () => {
+    try {
+      setLocalLoading(true);
+      const { uri } = await metaplex.nfts()?.uploadMetadata({
+        name: data.title,
+        description: data.description,
+        image: data.image,
+      });
+      console.log(uri);
+
+      let mintAddress;
+      const { mintNft } = await metaplex
+        .nfts()
+        ?.create({
+          uri: uri,
+          name: data.title,
+          sellerFeeBasicPoints: 500,
+        })
+        .then((res) => {
+          mintAddress = res.mintAddress.toString();
+          console.log(mintAddress);
+          axios
+            .post(
+              `https://dogecapital.onrender.com/api/${publicKey}/mintnft`,
+              {
+                title: data.title,
+                description: data.description,
+                image: data.image,
+                token_id: data.token_id,
+                nftMint: mintAddress,
+              },
+              {
+                headers: customHeaders,
+              }
+            )
+            .then((res) => {
+              console.log(res);
+              setData({
+                image: "",
+                title: "",
+                description: "",
+                token_id: "",
+              });
+              handleSuccess("Minted !");
+              setLocalLoading(false);
+            })
+            .catch((err) => {
+              console.log(err);
+              handleError("Error Occured !");
+              setLocalLoading(false);
+            });
+        });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const addData = async () => {
@@ -111,7 +173,7 @@ function Forms() {
           setLocalLoading(false);
         } catch (error) {
           handleError("Error Occured !");
-        setLocalLoading(false);
+          setLocalLoading(false);
         }
         setLocalLoading(false);
       })
@@ -195,7 +257,7 @@ function Forms() {
             />
 
             <div className="widthDiv">
-              <button className="btn mintBtn" onClick={addData}>
+              <button className="btn mintBtn" onClick={mintData}>
                 {localLoading ? <Loader height="25" width="25" /> : "Mint"}
               </button>
             </div>
