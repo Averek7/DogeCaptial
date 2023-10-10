@@ -10,7 +10,7 @@ const NftSchema = new Schema({
     type: String,
     required:true,
   },
-  nftMint: {
+  walletAddress: {
     type: String,
     required:true,
   },
@@ -19,8 +19,13 @@ const NftSchema = new Schema({
     required:true
   },
   image:{
-    type:String
+    type:String,
+    required:true
   },
+  nftMint:{
+    type:String,
+    required:true
+  }
 });
 
 const nftwallet = mongoose.model("nftwallet", NftSchema);
