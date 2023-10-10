@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Loader from "./Loader";
 import InputBox from "./InputBox";
-// import { create } from "ipfs-http-client";
+import { create } from "ipfs-http-client";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import axios from "axios";
 import { Web3Storage } from "web3.storage";
@@ -9,6 +9,7 @@ import Connect from "./Connect";
 import { toast } from "react-toastify";
 import {
   Metaplex,
+  bundlrStorage,
   walletAdapterIdentity,
 } from "@metaplex-foundation/js";
 
