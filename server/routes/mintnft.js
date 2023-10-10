@@ -1,4 +1,3 @@
-const { FindAllSupportsOnlyThreeFiltersMaxError } = require("@metaplex-foundation/js");
 const nftwallet = require("../model/NFT");
 const router =
  require("express").Router();
