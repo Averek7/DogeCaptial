@@ -36,7 +36,7 @@ Follow these steps to get the project up and running:
    
 Your Solana-integrated Next.js app should now be running at http://localhost:3000.
 
-Folder Structure
+## Folder Structure
 The project structure is organized as follows:
 
 /components: React components used in the application.
@@ -46,13 +46,14 @@ The project structure is organized as follows:
 
 Feel free to organize the structure further as your project evolves.
 
-Contributing
+## Contributing
 Contributions to this project are welcome. To contribute, follow these steps:
 
-Fork the repository.
+## Fork the repository.
 Create a new branch for your feature or bug fix.
 Make your changes and test them.
 Submit a pull request with a clear description of your changes.
-License
+
+## License
 This project is licensed under the MIT License. Feel free to use, modify, and distribute it as needed.
 
